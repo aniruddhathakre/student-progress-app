@@ -5,10 +5,15 @@ const {
   createStudent,
   updateStudent,
   deleteStudent,
+  getStudentById,
 } = require("../controllers/studentController");
 
 router.route("/").get(getStudent).post(createStudent);
 
-router.route("/:id").put(updateStudent).delete(deleteStudent);
+router
+  .route("/:id")
+  .get(getStudentById)
+  .put(updateStudent)
+  .delete(deleteStudent);
 
 module.exports = router;
