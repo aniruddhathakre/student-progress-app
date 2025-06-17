@@ -1,4 +1,5 @@
 const Student = require("../models/StudentModel");
+const { getContestHistory } = require("../utils/codeforcesService");
 
 const getStudent = async (req, res) => {
   try {
@@ -74,10 +75,26 @@ const getStudentById = async (req, res) => {
   }
 };
 
+const getStudentContestHistory = async (req, res) => {
+  try {
+    const contestHistory = await getContestHistory(req.params.handle);
+
+    console.log(
+      `--- Data being sent back for handle: ${req.params.handle} ---`
+    );
+    console.log(contestHistory);
+
+    res.status(200).json(contestHistory);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getStudent,
   createStudent,
   updateStudent,
   deleteStudent,
   getStudentById,
+  getStudentContestHistory,
 };
