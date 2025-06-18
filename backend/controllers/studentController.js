@@ -1,5 +1,8 @@
 const Student = require("../models/StudentModel");
-const { getContestHistory } = require("../utils/codeforcesService");
+const {
+  getContestHistory,
+  getSubmissionHistory,
+} = require("../utils/codeforcesService");
 
 const getStudent = async (req, res) => {
   try {
@@ -7,7 +10,6 @@ const getStudent = async (req, res) => {
 
     res.status(200).json(students);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -79,12 +81,16 @@ const getStudentContestHistory = async (req, res) => {
   try {
     const contestHistory = await getContestHistory(req.params.handle);
 
-    console.log(
-      `--- Data being sent back for handle: ${req.params.handle} ---`
-    );
-    console.log(contestHistory);
-
     res.status(200).json(contestHistory);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getStudentSubmissionHistory = async (req, res) => {
+  try {
+    const submissions = await getSubmissionHistory(req.params.handle);
+    res.status(200).json(submissions);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -97,4 +103,5 @@ module.exports = {
   deleteStudent,
   getStudentById,
   getStudentContestHistory,
+  getStudentSubmissionHistory,
 };

@@ -15,3 +15,6 @@ export const getStudentById = (id) => API.get(`/students/${id}`);
 
 export const getContestHistory = (handle) =>
   API.get(`/students/${handle}/contests`);
+
+export const getSubmissionHistory = (handle) =>
+  API.get(`/students/${handle}/submissions`);

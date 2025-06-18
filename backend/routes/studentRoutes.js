@@ -7,6 +7,7 @@ const {
   deleteStudent,
   getStudentById,
   getStudentContestHistory,
+  getStudentSubmissionHistory,
 } = require("../controllers/studentController");
 
 router.route("/").get(getStudent).post(createStudent);
@@ -18,5 +19,7 @@ router
   .delete(deleteStudent);
 
 router.route("/:handle/contests").get(getStudentContestHistory);
+
+router.route("/:handle/submissions").get(getStudentSubmissionHistory);
 
 module.exports = router;
