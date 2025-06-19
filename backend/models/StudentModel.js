@@ -43,7 +43,7 @@ const studentSchema = new mongoose.Schema(
     lastSyncedAt: {
       type: Date,
     },
-    isEmailDisbale: {
+    isEmailDisabled: {
       type: Boolean,
       default: false,
     },

@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const { scheduleJobs } = require("./cronJobs");
 
 dotenv.config();
 
@@ -24,4 +25,5 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running at port : ${PORT}`);
+  scheduleJobs();
 });

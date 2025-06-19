@@ -11,7 +11,12 @@ const StudentForm = ({ onSubmit, onCancel, initialData }) => {
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        name: initialData.name || "",
+        email: initialData.email || "",
+        phone: initialData.phone || "",
+        codeforcesHandle: initialData.codeforcesHandle || "",
+      });
     } else {
       setFormData({ name: "", email: "", phone: "", codeforcesHandle: "" });
     }

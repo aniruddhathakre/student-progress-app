@@ -8,6 +8,7 @@ const {
   getStudentById,
   getStudentContestHistory,
   getStudentSubmissionHistory,
+  manualSync,
 } = require("../controllers/studentController");
 
 router.route("/").get(getStudent).post(createStudent);
@@ -21,5 +22,7 @@ router
 router.route("/:handle/contests").get(getStudentContestHistory);
 
 router.route("/:handle/submissions").get(getStudentSubmissionHistory);
+
+router.route("/sync").post(manualSync);
 
 module.exports = router;

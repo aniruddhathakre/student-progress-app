@@ -16,6 +16,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Switch,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,6 +25,7 @@ import * as api from "../services/api";
 import StudentForm from "../components/StudentForm";
 import CloseIcon from "@mui/icons-material/Close";
 import ConfirmationDialog from "../components/ConfirmationDialog";
+import { CSVLink } from "react-csv";
 
 const DashboardPage = () => {
   const [students, setStudents] = useState([]);
@@ -81,6 +83,27 @@ const DashboardPage = () => {
     }
   };
 
+  const handleEmailToggle = async (student) => {
+    try {
+      const updatedData = { isEmailDisabled: !student.isEmailDisabled };
+      await api.updateStudent(student._id, updatedData);
+
+      fetchStudents();
+    } catch (error) {
+      console.error("Failed to update email preference:", error);
+    }
+  };
+
+  const csvHeaders = [
+    { label: "Name", key: "name" },
+    { label: "Email", key: "email" },
+    { label: "Phone", key: "phone" },
+    { label: "Codeforces Handle", key: "codeforcesHandle" },
+    { label: "Current Rating", key: "currentRating" },
+    { label: "Max Rating", key: "maxRating" },
+    { label: "Last Synced At", key: "lastSyncedAt" },
+  ];
+
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, width: "100%" }}>
       <Box
@@ -105,6 +128,18 @@ const DashboardPage = () => {
         </Box>
       </Box>
 
+      <CSVLink
+        data={students}
+        headers={csvHeaders}
+        filename={"student_progress_report.csv"}
+        style={{ textDecoration: "none" }} // To make the button look normal
+        target="_blank"
+      >
+        <Button variant="contained" color="success">
+          Download as CSV
+        </Button>
+      </CSVLink>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -113,11 +148,17 @@ const DashboardPage = () => {
               <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
                 Email
               </TableCell>
-              <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+              {/* --- ADD THIS HEADER CELL BACK --- */}
+              <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 Phone
               </TableCell>
               <TableCell>Codeforces Handle</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell align="center">Current Rating</TableCell>
+              <TableCell align="center">Max Rating</TableCell>
+              <TableCell>Last Synced</TableCell>
+              <TableCell align="center">Emails On</TableCell>
+              <TableCell align="center">Reminders Sent</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -127,11 +168,33 @@ const DashboardPage = () => {
                 <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
                   {student.email}
                 </TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
-                  {student.phone}
+
+                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  {student.phone || "N/A"}
                 </TableCell>
                 <TableCell>{student.codeforcesHandle}</TableCell>
+                <TableCell align="center">
+                  {student.currentRating || "N/A"}
+                </TableCell>
+                <TableCell align="center">
+                  {student.maxRating || "N/A"}
+                </TableCell>
                 <TableCell>
+                  {student.lastSyncedAt
+                    ? new Date(student.lastSyncedAt).toLocaleString("en-GB")
+                    : "Never"}
+                </TableCell>
+                <TableCell align="center">
+                  <Switch
+                    checked={!student.isEmailDisabled}
+                    onChange={() => handleEmailToggle(student)}
+                    color="success"
+                  />
+                </TableCell>
+                <TableCell align="center">
+                  {student.reminderEmailCount || 0}
+                </TableCell>
+                <TableCell align="right">
                   <Link to={`/student/${student._id}`}>
                     <IconButton
                       title="View Details"
