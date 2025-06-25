@@ -1,6 +1,13 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+// const API = axios.create({ baseURL: "http://localhost:5000/api" });
+
+const API = axios.create({
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://your-backend-render-url.onrender.com"
+      : "http://localhost:5000/api",
+});
 
 export const getStudents = () => API.get("/students");
 
