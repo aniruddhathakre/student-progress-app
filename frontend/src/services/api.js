@@ -5,7 +5,7 @@ import axios from "axios";
 const API = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://your-backend-render-url.onrender.com"
+      ? "https://student-progress-u4c1.onrender.com"
       : "http://localhost:5000/api",
 });
 
